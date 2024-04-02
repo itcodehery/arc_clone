@@ -9,9 +9,9 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blueGrey.shade900,
-      body: const Row(children: [
+      body: Row(children: [
         Navdrw(),
-        NewTab(),
+        const NewTab(),
       ]),
     );
   }

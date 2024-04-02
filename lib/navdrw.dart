@@ -1,7 +1,11 @@
+import 'package:arc_clone/provider/bookmarks.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Navdrw extends StatelessWidget {
-  const Navdrw({Key? key}) : super(key: key);
+  Navdrw({Key? key}) : super(key: key);
+
+  final controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +62,14 @@ class Navdrw extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
+              cursorColor: Colors.white,
+              style: const TextStyle(color: Colors.white),
+              controller: controller,
+              onSubmitted: (value) {
+                context.read<BookmarksProvider>().addBookmark(value);
+                // clear the text field
+                controller.clear();
+              },
             ),
           ),
           const Spacer(),
@@ -78,19 +90,21 @@ class Navdrw extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return LinkTile(
-                    index: index,
-                    title: 'Item $index',
-                    onTap: () {},
-                  );
-                }),
+          Consumer<BookmarksProvider>(
+            builder: (context, value, child) => Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: value.bookmarks.length,
+                  itemBuilder: (context, index) {
+                    return LinkTile(
+                      index: index,
+                      title: value.bookmarks[index],
+                      onTap: () {},
+                    );
+                  }),
+            ),
           ),
         ]);
   }
@@ -108,6 +122,26 @@ class LinkTile extends StatelessWidget {
   final String title;
   final void Function()? onTap;
 
+  String processLink(String tit) {
+    var titled = tit.replaceAll('www.', '');
+    titled = titled.replaceAll('.com', '');
+    titled = titled.replaceAll('.net', '');
+    titled = titled.replaceAll('https://', '');
+    titled = titled.replaceAll('http://', '');
+    titled = titled.replaceAll('web.', '');
+    titled = toSentenceCase(titled);
+    titled = titled.trimLeft();
+    titled = titled.trimRight();
+    return titled;
+  }
+
+  String toSentenceCase(String input) {
+    if (input.isEmpty) return input;
+    return input.replaceFirst(RegExp(r'^[^\s]+'),
+            input.characters.first.toUpperCase().toString()) +
+        input.substring(1).toLowerCase();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -119,13 +153,24 @@ class LinkTile extends StatelessWidget {
         color: Colors.white70,
         size: 16,
       ),
-      trailing: const HoverableWidget(
-          child: Icon(
-        Icons.close,
-        color: Colors.white,
+      trailing: HoverableWidget(
+          child: ElevatedButton(
+        style: const ButtonStyle(
+            elevation: MaterialStatePropertyAll(0),
+            surfaceTintColor: MaterialStatePropertyAll(Colors.transparent),
+            backgroundColor: MaterialStatePropertyAll(Colors.transparent),
+            iconColor: MaterialStatePropertyAll(Colors.white54),
+            minimumSize: MaterialStatePropertyAll(Size(16, 16))),
+        child: const Icon(
+          Icons.close,
+          color: Colors.white54,
+        ),
+        onPressed: () {
+          context.read<BookmarksProvider>().removeBookmark(title);
+        },
       )),
       focusColor: Colors.white70,
-      title: Text('Item $index'),
+      title: Text(processLink(title)),
       titleTextStyle: const TextStyle(color: Colors.white),
       onTap: onTap,
     );
