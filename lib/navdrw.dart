@@ -1,4 +1,4 @@
-import 'package:arc_clone/provider/bookmarks.dart';
+import 'package:compass_browser/provider/bookmarks.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
