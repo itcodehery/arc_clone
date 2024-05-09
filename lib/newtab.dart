@@ -19,10 +19,14 @@ class NewTab extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(6)),
             ),
           ),
-          onSaved: (newValue) {
-            LinkProvider().updateLink(newValue!);
+          onChanged: (value) {
+            LinkProvider().updateLink(value);
             debugPrint(LinkProvider().currentLink);
-            Navigator.of(context).pushReplacementNamed('');
+          },
+          onFieldSubmitted: (value) {
+            if (value.isNotEmpty) {
+              Navigator.of(context).pushReplacementNamed('/opentab');
+            }
           },
         ),
       ],

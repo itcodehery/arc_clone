@@ -1,8 +1,7 @@
 import 'package:compass_browser/components/windows_titlebar.dart';
 import 'package:compass_browser/home.dart';
-import 'package:compass_browser/provider/bookmarks.dart';
+import 'package:compass_browser/open_tab.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 
 Future<void> main() async {
@@ -43,6 +42,9 @@ class MyApp extends StatelessWidget {
             preferredSize: Size.fromHeight(40), child: WindowsTitlebar()),
         body: Home(),
       ),
+      routes: {
+        "/opentab": (context) => const OpenTab(),
+      },
     );
   }
 }

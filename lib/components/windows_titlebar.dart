@@ -30,21 +30,29 @@ class WindowsTitlebar extends StatelessWidget {
           ),
           const Spacer(),
           IconButton(
-              onPressed: () {},
+              onPressed: () async {
+                await windowManager.minimize();
+              },
               style: buttonStyle,
               icon: const Icon(
                 Icons.minimize_rounded,
                 size: 14,
               )),
           IconButton(
-              onPressed: () {},
+              onPressed: () async {
+                if (!await windowManager.isMaximized()) {
+                  windowManager.maximize();
+                }
+              },
               style: buttonStyle,
               icon: const Icon(
                 Icons.square_outlined,
                 size: 14,
               )),
           IconButton(
-              onPressed: () {},
+              onPressed: () async {
+                await windowManager.close();
+              },
               style: buttonStyle,
               icon: const Icon(
                 Icons.clear,
