@@ -7,7 +7,7 @@ class WindowsTitlebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const buttonStyle =
-        ButtonStyle(fixedSize: MaterialStatePropertyAll(Size(30, 30)));
+        ButtonStyle(fixedSize: WidgetStatePropertyAll(Size(30, 30)));
     return GestureDetector(
       onDoubleTap: () async {
         await windowManager.isFullScreen();
@@ -16,7 +16,27 @@ class WindowsTitlebar extends StatelessWidget {
         children: [
           IconButton(
               style: buttonStyle,
-              onPressed: () {},
+              onPressed: () {
+                //showOverlay
+                showMenu(
+                  context: context,
+                  position: const RelativeRect.fromLTRB(0, 40, 0, 0),
+                  items: const [
+                    PopupMenuItem(
+                      child: Text('New Window'),
+                    ),
+                    PopupMenuItem(
+                      child: Text('New Incognito Window'),
+                    ),
+                    PopupMenuItem(
+                      child: Text('New Tab'),
+                    ),
+                    PopupMenuItem(
+                      child: Text('Settings'),
+                    ),
+                  ],
+                );
+              },
               icon: const Center(
                 child: Icon(
                   Icons.map_rounded,

@@ -24,6 +24,9 @@ class _OpenTabState extends State<OpenTab> {
   @override
   void initState() {
     super.initState();
+
+    _controller = WebviewController();
+    initializeController();
     initPlatformState();
   }
 
